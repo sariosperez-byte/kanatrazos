@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Kana · Flashcards</title><style>
+:root{--bg:#0d0e12;--s:#16181f;--s2:#1f222c;--t:#e8e9ee;--m:#868b9c;--a:#8b7cff;--c:#4fd1e8;--ok:#3ddc97;--bad:#ff6b7a;--ln:#2a2e3a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:inherit}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(900px 420px at 50% -8%,#1c1944,transparent),var(--bg);color:var(--t);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+.jp{font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;max-width:760px;margin:0 auto;padding:16px 18px}
+.logo{font-weight:700;letter-spacing:.04em}.logo span{color:var(--c)}
+nav button{background:none;border:0;color:var(--m);font:inherit;padding:6px 12px;border-radius:8px;cursor:pointer}
+nav button.on{color:var(--t);background:var(--s2)}
+main{max-width:760px;margin:0 auto;padding:0 18px 40px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+h1{font-size:28px;margin:8px 0 4px}h1 small{color:var(--m);font-weight:400;font-size:16px}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--m);margin:26px 0 10px;font-weight:600}
+h3{margin:0 0 4px;font-size:14px;color:var(--m)}h4{margin:18px 0 8px;font-size:13px;color:var(--m);font-weight:500}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.mode{background:var(--s);border:1px solid var(--ln);border-radius:12px;padding:12px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.mode span{color:var(--m);font-size:12.5px}.mode.on{border-color:var(--a);box-shadow:0 0 0 1px var(--a) inset,0 0 24px #8b7cff22}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.seg,.chip{background:var(--s);border:1px solid var(--ln);border-radius:999px;padding:6px 14px;color:var(--m)}
+.seg.on,.chip.on{color:var(--t);border-color:var(--c);background:#4fd1e812}
+.chip.k::after{content:" ·カ";opacity:.6}
+label.lb{color:var(--m);min-width:110px}
+select{background:var(--s);color:var(--t);border:1px solid var(--ln);border-radius:8px;padding:6px 10px;font:inherit}
+.btn{background:var(--s2);border:1px solid var(--ln);border-radius:10px;padding:10px 16px}
+.btn:hover{border-color:var(--m)}
+.pri{background:linear-gradient(135deg,var(--a),#5b8cff);border:0;color:#fff;font-weight:600}
+.go{width:100%;padding:14px;font-size:16px;margin-top:22px}
+.ok{background:#3ddc9718;border-color:#3ddc9755;color:var(--ok)}.no{background:#ff6b7a18;border-color:#ff6b7a55;color:var(--bad)}
+.mu{color:var(--m)}.warn{color:var(--bad);margin-top:12px}
+.top{display:flex;align-items:center;gap:12px;margin:6px 0 18px}
+.pb{flex:1;height:6px;background:var(--s2);border-radius:9px;overflow:hidden}.pb i,.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--c));border-radius:9px;transition:width .3s}
+.stage{perspective:1200px;margin:0 auto;max-width:420px}
+.card{position:relative;height:min(62vw,340px);min-height:260px;cursor:pointer;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:linear-gradient(160deg,#1c1f2b,#14161d);border:1px solid var(--ln);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 20px 60px #0008,0 0 40px #8b7cff14;text-align:center;padding:16px}
+.back{transform:rotateY(180deg);border-color:#4fd1e855}
+.kana{font-size:clamp(84px,24vw,150px);line-height:1.1}.kana.sm{font-size:44px;color:var(--m)}
+.rom{font-size:clamp(54px,14vw,84px);font-weight:600;color:var(--c);line-height:1}
+.tag{position:absolute;top:14px;left:18px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--m)}
+.note{color:var(--m);max-width:80%;font-size:14px}.hint{color:var(--m);font-size:13px;position:absolute;bottom:14px}
+#act{display:flex;gap:10px;justify-content:center;margin:22px 0 10px;flex-wrap:wrap;min-height:46px}
+.nv{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.nv .btn{padding:7px 12px;font-size:13px;color:var(--m)}
+.st{display:flex;justify-content:center;gap:18px;margin-top:16px;color:var(--m);font-size:13px}.st b{color:var(--t)}
+kbd{font:11px ui-monospace,monospace;background:#0003;border:1px solid #fff3;border-radius:4px;padding:0 5px;margin-left:6px;opacity:.7}
+.ov{position:fixed;inset:0;background:#0d0e12ee;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;z-index:5;font-size:20px}
+.box{background:var(--s);border:1px solid var(--ln);border-radius:14px;padding:16px;flex:1;min-width:200px}
+.big{font-size:40px;font-weight:700;color:var(--c);line-height:1.1}.bar{height:6px;background:var(--s2);border-radius:9px;margin:8px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:6px}
+.cell{background:var(--s);border:1px solid var(--ln);border-radius:9px;text-align:center;padding:6px 0 3px;font-size:22px;line-height:1.2}
+.cell small{display:block;font-size:10px;color:var(--m);font-family:system-ui}
+.cell.m{background:#4fd1e81c;border-color:var(--c)}.cell.l{background:#8b7cff1c;border-color:var(--a)}.cell.d{background:#ff6b7a1c;border-color:var(--bad)}.cell.n{opacity:.55}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--m)}.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;border:1px solid}
+.hist{width:100%;border-collapse:collapse;font-size:13.5px}.hist td{padding:6px 4px;border-bottom:1px solid var(--ln)}
+@media(prefers-reduced-motion:reduce){.inner,.card{transition:none;animation:none}}
+</style></head><body>
+<header><div class="logo">かな<span>·</span>cards</div><nav aria-label="Secciones"><button data-a="view" data-v="h" id="nh">Estudiar</button><button data-a="view" data-v="p" id="np">Progreso</button></nav></header>
+<main id="app"></main><div id="live" class="sr" aria-live="polite" style="position:absolute;left:-9999px"></div>
+<script>
+const G=[
+{id:'v',n:'Vocales',s:'あ:a:como la a de «casa»|い:i:como la i de «isla»|う:u:como la u de «luna», labios relajados|え:e:como la e de «mesa»|お:o:como la o de «foco»'},
+{id:'k',n:'Fila K',s:'か:ka|き:ki|く:ku|け:ke|こ:ko'},
+{id:'s',n:'Fila S',s:'さ:sa|し:shi|す:su|せ:se|そ:so'},
+{id:'t',n:'Fila T',s:'た:ta|ち:chi|つ:tsu|て:te|と:to'},
+{id:'n',n:'Fila N',s:'な:na|に:ni|ぬ:nu|ね:ne|の:no'},
+{id:'h',n:'Fila H',s:'は:ha:como partícula se lee «wa»|ひ:hi|ふ:fu:sonido entre f y h|へ:he:como partícula se lee «e»|ほ:ho'},
+{id:'m',n:'Fila M',s:'ま:ma|み:mi|む:mu|め:me|も:mo'},
+{id:'y',n:'Fila Y',s:'や:ya|ゆ:yu|よ:yo'},
+{id:'r',n:'Fila R',s:'ら:ra:r suave, entre r y l|り:ri|る:ru|れ:re|ろ:ro'},
+{id:'w',n:'Fila W y ん',s:'わ:wa|を:wo:se pronuncia «o»; solo como partícula|ん:n:nasal, no lleva vocal'},
+{id:'dk',n:'Dakuten y handakuten',s:'が:ga|ぎ:gi|ぐ:gu|げ:ge|ご:go|ざ:za|じ:ji|ず:zu|ぜ:ze|ぞ:zo|だ:da|ぢ:ji:suena igual que じ|づ:zu:suena igual que ず|で:de|ど:do|ば:ba|び:bi|ぶ:bu|べ:be|ぼ:bo|ぱ:pa|ぴ:pi|ぷ:pu|ぺ:pe|ぽ:po'},
+{id:'yo',n:'Yōon (combinaciones)',s:'きゃ:kya|きゅ:kyu|きょ:kyo|しゃ:sha|しゅ:shu|しょ:sho|ちゃ:cha|ちゅ:chu|ちょ:cho|にゃ:nya|にゅ:nyu|にょ:nyo|ひゃ:hya|ひゅ:hyu|ひょ:hyo|みゃ:mya|みゅ:myu|みょ:myo|りゃ:rya|りゅ:ryu|りょ:ryo|ぎゃ:gya|ぎゅ:gyu|ぎょ:gyo|じゃ:ja|じゅ:ju|じょ:jo|びゃ:bya|びゅ:byu|びょ:byo|ぴゃ:pya|ぴゅ:pyu|ぴょ:pyo'},
+{id:'ts',n:'っ / ッ pequeña',s:'っ:(pausa):duplica la consonante siguiente: きっと → kitto'},
+{id:'sp',n:'Katakana: vocal larga y sonidos extranjeros',k:1,s:'ー:ā ī ū ē ō:alarga la vocal anterior: コーヒー → kōhī|ヴ:vu|ファ:fa|フィ:fi|フェ:fe|フォ:fo|ティ:ti|ディ:di|ウィ:wi|ウェ:we|ウォ:wo|シェ:she|チェ:che|ジェ:je'}];
+const BASIC=['v','k','s','t','n','h','m','y','r','w'];
+const conv=s=>[...s].map(c=>{const n=c.charCodeAt(0);return n>=0x3041&&n<=0x3096?String.fromCharCode(n+96):c}).join('');
+const ALL=[];G.forEach(g=>g.s.split('|').forEach(x=>{const p=x.split(':'),a=p[0];['h','k'].forEach(sc=>{if(g.k&&sc=='h')return;ALL.push({id:sc+g.id+a,sc,g:g.id,k:g.k||sc=='h'?a:conv(a),r:p[1],n:p.slice(2).join(':')})})}));
+const KEY='kana-fc-v1';let S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+S=S||{};S.c=S.c||{};S.h=S.h||[];S.best=S.best||0;S.cur=S.cur||0;
+S.cfg=Object.assign({mode:'pra',sc:'h',g:BASIC.slice(),ord:'rnd',ro:0,hard:0,n:20,auto:1},S.cfg);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),app=$('#app');let view='h',ss=null,msg='';
+const st=c=>S.c[c.id],stat=c=>{const s=st(c);return!s?'n':s.s>=3?'m':(s.b>0&&s.s<2)?'d':'l'};
+const pool=()=>{const c=S.cfg;let L=ALL.filter(x=>c.sc.includes(x.sc)&&c.g.includes(x.g));if(c.mode=='err'||c.hard)L=L.filter(x=>stat(x)=='d');return L};
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const seg=(k,o)=>o.map(x=>`<button class="seg${S.cfg[k]==x[0]?' on':''}" data-a="set" data-k="${k}" data-v="${x[0]}" aria-pressed="${S.cfg[k]==x[0]}">${x[1]}</button>`).join('');
+const tog=(k,t)=>`<button class="seg${S.cfg[k]?' on':''}" data-a="tog" data-k="${k}" aria-pressed="${!!S.cfg[k]}">${t}</button>`;
+const nm=c=>c.sc=='h'?'Hiragana':'Katakana';
+
+function vh(){const c=S.cfg,n=pool().length;
+return`<h1>かな <small>flashcards de hiragana y katakana</small></h1>
+<h2>Modo</h2><div class="modes">${[['lea','Aprender','Recorre en orden · no puntúa'],['pra','Practicar','Aleatorio, romaji oculto'],['err','Repasar errores','Solo los que te cuestan'],['all','Repasar todos','Todo lo seleccionado']].map(m=>`<button class="mode${c.mode==m[0]?' on':''}" data-a="mode" data-v="${m[0]}" aria-pressed="${c.mode==m[0]}"><b>${m[1]}</b><span>${m[2]}</span></button>`).join('')}</div>
+<h2>Silabario</h2><div class="row">${seg('sc',[['h','Hiragana'],['k','Katakana'],['hk','Mezclar ambos']])}</div>
+<h2>Grupos</h2><div class="row">${G.map(g=>`<button class="chip${g.k?' k':''}${c.g.includes(g.id)?' on':''}" data-a="grp" data-v="${g.id}" aria-pressed="${c.g.includes(g.id)}">${g.n}</button>`).join('')}</div>
+<h2>Opciones</h2>
+<div class="row"><label class="lb">Orden</label>${seg('ord',[['seq','Secuencial'],['rnd','Aleatorio']])}</div>
+<div class="row"><label class="lb">Ayudas</label>${tog('ro','Mostrar romaji desde el inicio')}${tog('hard','Solo difíciles')}${tog('auto','Avance automático')}</div>
+<div class="row"><label class="lb" for="cnt">Tarjetas</label><select id="cnt" data-a="n">${[10,20,30,50,0].map(v=>`<option value="${v}"${c.n==v?' selected':''}>${v||'Todas'}</option>`).join('')}</select><span class="mu">${n} disponibles con estos filtros</span></div>
+${msg?`<p class="warn" role="alert">${msg}</p>`:''}
+<button class="btn pri go" data-a="start">Comenzar sesión</button>`}
+
+function acts(){if(!ss.fl)return`<button class="btn pri" data-a="flip">Voltear<kbd>Espacio</kbd></button>`;
+const a=ss.ans[ss.i];if(S.cfg.mode=='lea')return`<button class="btn pri" data-a="next">Siguiente →</button>`;
+if(a!==undefined)return`<span class="${a?'ok':'no'} btn">${a?'Registrado: me la sé':'Registrado: a practicar'}</span><button class="btn pri" data-a="next">Siguiente →</button>`;
+return`<button class="btn no" data-a="bad">Necesito practicar<kbd>1</kbd></button><button class="btn ok" data-a="good">Me la sé<kbd>2</kbd></button>`}
+
+function vs(){if(ss.done){const t=ss.ok+ss.bad;return`<h1>Sesión completada</h1><div class="row"><div class="box"><div class="big">${t?Math.round(ss.ok/t*100):0}%</div><p class="mu">${ss.ok} me las sé · ${ss.bad} a practicar · ${ss.L.length} tarjetas</p></div></div>
+<div class="row"><button class="btn pri" data-a="start">Repetir sesión</button><button class="btn" data-a="home">Volver al inicio</button><button class="btn" data-a="view" data-v="p">Ver progreso</button></div>`}
+const c=ss.L[ss.i],cf=S.cfg;
+return`${ss.pause?`<div class="ov" role="dialog" aria-label="Pausa"><span>Pausado</span><button class="btn pri" data-a="pause">Reanudar</button></div>`:''}
+<div class="top"><button class="btn" data-a="home" style="padding:6px 12px">← Salir</button><div class="pb" role="progressbar" aria-valuemin="0" aria-valuemax="${ss.L.length}" aria-valuenow="${ss.i}"><i style="width:${ss.i/ss.L.length*100}%"></i></div><span class="mu">${ss.i+1} / ${ss.L.length}</span></div>
+<div class="stage"><div class="card jp${ss.fl?' flip':''}" id="card" role="button" tabindex="0" aria-label="Tarjeta ${ss.i+1}: ${c.k}. ${ss.fl?'Respuesta '+c.r:'Pulsa para voltear'}" data-a="flip">
+<div class="inner"><div class="face" aria-hidden="true"><span class="tag">${nm(c)}</span><div class="kana">${c.k}</div>${cf.ro?`<div class="mu">${c.r}</div>`:'<span class="hint">Pulsa para voltear</span>'}</div>
+<div class="face back" aria-hidden="true"><span class="tag">${nm(c)}</span><div class="rom">${c.r}</div><div class="kana sm">${c.k}</div>${c.n?`<div class="note">${c.n}</div>`:''}</div></div></div></div>
+<div id="act">${acts()}</div>
+<div class="nv"><button class="btn" data-a="prev">← Anterior</button><button class="btn" data-a="pause">Pausa<kbd>P</kbd></button><button class="btn" data-a="start">Reiniciar</button><button class="btn" data-a="next">Siguiente →</button></div>
+<div class="st"><span>✓ <b>${ss.ok}</b></span><span>✗ <b>${ss.bad}</b></span><span>Racha <b>${ss.str}</b></span></div>`}
+
+function vp(){const rows=ALL.filter(c=>st(c));const O=rows.reduce((a,c)=>a+st(c).o,0),B=rows.reduce((a,c)=>a+st(c).b,0);
+const sc=(k,t)=>{const L=ALL.filter(c=>c.sc==k),m=L.filter(c=>stat(c)=='m').length,s=L.filter(st).length,p=m/L.length*100;return`<div class="box"><h3>${t}</h3><div class="big">${Math.round(p)}%</div><div class="bar"><i style="width:${p}%"></i></div><span class="mu">${m} dominados · ${s} vistos · ${L.length} en total</span></div>`};
+const grid=k=>G.filter(g=>!(g.k&&k=='h')).map(g=>`<h4>${g.n}</h4><div class="grid jp">${ALL.filter(c=>c.sc==k&&c.g==g.id).map(c=>`<span class="cell ${stat(c)}" title="${c.r}">${c.k}<small>${c.r.split(' ')[0]}</small></span>`).join('')}</div>`).join('');
+return`<h1>Progreso</h1><h2>Dominio</h2><div class="row">${sc('h','Hiragana')}${sc('k','Katakana')}</div>
+<div class="row"><div class="box"><h3>Caracteres practicados</h3><div class="big">${rows.length}</div></div><div class="box"><h3>Aciertos / a practicar</h3><div class="big">${O} <span class="mu" style="font-size:20px">/ ${B}</span></div></div><div class="box"><h3>Racha actual / mejor</h3><div class="big">${S.cur} <span class="mu" style="font-size:20px">/ ${S.best}</span></div></div></div>
+<h2>Silabario</h2><div class="lg"><span><i style="border-color:var(--c);background:#4fd1e81c"></i>Dominado (3+ aciertos seguidos)</span><span><i style="border-color:var(--a);background:#8b7cff1c"></i>Aprendiendo</span><span><i style="border-color:var(--bad);background:#ff6b7a1c"></i>Me cuesta</span><span><i style="border-color:var(--ln)"></i>Sin ver</span></div>
+<h2>Hiragana</h2>${grid('h')}<h2>Katakana</h2>${grid('k')}
+<h2>Historial de sesiones</h2>${S.h.length?`<table class="hist">${S.h.slice(0,10).map(h=>`<tr><td>${new Date(h.d).toLocaleString('es',{dateStyle:'short',timeStyle:'short'})}</td><td>${h.sc=='h'?'Hiragana':h.sc=='k'?'Katakana':'Ambos'}</td><td>✓ ${h.o}</td><td>✗ ${h.b}</td></tr>`).join('')}</table>`:'<p class="mu">Aún no hay sesiones registradas.</p>'}
+<div class="row" style="margin-top:26px"><button class="btn no" data-a="reset">Borrar todo el progreso</button></div>`}
+
+function render(){app.innerHTML=view=='s'?vs():view=='p'?vp():vh();$('#nh').classList.toggle('on',view!='p');$('#np').classList.toggle('on',view=='p');window.scrollTo(0,0)}
+function start(){msg='';const c=S.cfg;let L=pool();if(!L.length){msg=c.mode=='err'||c.hard?'Aún no tienes caracteres difíciles en esta selección. Practica primero y vuelve aquí.':'Selecciona al menos un grupo.';view='h';return render()}
+if(c.ord=='rnd')shuf(L);if(+c.n&&L.length>+c.n)L=L.slice(0,+c.n);
+ss={L,i:0,fl:0,ans:{},ok:0,bad:0,str:0,pause:0,done:0,saved:0};view='s';render()}
+function endS(){if(!ss||ss.saved||S.cfg.mode=='lea'||ss.ok+ss.bad==0)return;ss.saved=1;S.h.unshift({d:Date.now(),o:ss.ok,b:ss.bad,sc:S.cfg.sc});S.h=S.h.slice(0,50);save()}
+function go(d){const i=ss.i+d;if(i<0)return;ss.fl=0;if(i>=ss.L.length){ss.done=1;endS()}else ss.i=i;render()}
+function flip(){if(ss.pause||ss.done)return;ss.fl=!ss.fl;const c=$('#card');c.classList.toggle('flip',ss.fl);const x=ss.L[ss.i];c.setAttribute('aria-label',`Tarjeta ${ss.i+1}: ${x.k}. ${ss.fl?'Respuesta '+x.r:'Pulsa para voltear'}`);$('#act').innerHTML=acts();$('#live').textContent=ss.fl?x.r:''}
+function ans(g){if(!ss.fl||ss.pause||ss.done||S.cfg.mode=='lea'||ss.ans[ss.i]!==undefined)return;const c=ss.L[ss.i];
+const s=S.c[c.id]=S.c[c.id]||{o:0,b:0,s:0};ss.ans[ss.i]=g;
+if(g){s.o++;s.s++;S.cur++;S.best=Math.max(S.best,S.cur);ss.ok++;ss.str++}else{s.b++;s.s=0;S.cur=0;ss.bad++;ss.str=0}
+s.t=Date.now();save();if(S.cfg.auto)go(1);else{$('#act').innerHTML=acts();$('.st').innerHTML=`<span>✓ <b>${ss.ok}</b></span><span>✗ <b>${ss.bad}</b></span><span>Racha <b>${ss.str}</b></span>`}}
+
+app.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t||t.tagName=='SELECT')return;const a=t.dataset.a,v=t.dataset.v,c=S.cfg;
+if(a=='flip')flip();else if(a=='good')ans(1);else if(a=='bad')ans(0);else if(a=='next')go(1);else if(a=='prev')go(-1);
+else if(a=='pause'){ss.pause=!ss.pause;render()}
+else if(a=='start')start();
+else if(a=='home'){endS();view='h';render()}
+else if(a=='view')view=v,render();
+else if(a=='mode'){c.mode=v;c.ord=v=='lea'?'seq':'rnd';c.ro=v=='lea'?1:0;if(v=='all')c.ord='seq';save();render()}
+else if(a=='set'){c[t.dataset.k]=v;save();render()}
+else if(a=='tog'){c[t.dataset.k]=c[t.dataset.k]?0:1;save();render()}
+else if(a=='grp'){c.g=c.g.includes(v)?c.g.filter(x=>x!=v):c.g.concat(v);save();render()}
+else if(a=='reset'&&confirm('¿Borrar todo el progreso y el historial? No se puede deshacer.')){S.c={};S.h=[];S.best=S.cur=0;save();render()}});
+document.querySelector('nav').addEventListener('click',e=>{const t=e.target.closest('[data-a=view]');if(t){if(view=='s')endS();view=t.dataset.v;render()}});
+app.addEventListener('change',e=>{if(e.target.dataset.a=='n'){S.cfg.n=+e.target.value;save();render()}});
+addEventListener('keydown',e=>{if(view!='s'||!ss||e.ctrlKey||e.metaKey||e.altKey||e.target.tagName=='SELECT')return;const k=e.key;
+if(k=='p'||k=='P'){if(!ss.done){ss.pause=!ss.pause;render()}return}
+if(ss.pause||ss.done)return;
+if(k==' '||(k=='Enter'&&e.target.id=='card')){e.preventDefault();flip()}
+else if(k=='1')ans(0);else if(k=='2')ans(1);
+else if(k=='ArrowRight')go(1);else if(k=='ArrowLeft')go(-1);
+else if(k=='Escape'){endS();view='h';render()}});
+render();
+</script></body></html>
